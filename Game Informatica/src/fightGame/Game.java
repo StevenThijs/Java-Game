@@ -44,6 +44,7 @@ public class Game implements Runnable {
 		gameState = new GameState();
 		State.setState(gameState);
 
+
 		
 	}
 	

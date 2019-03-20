@@ -12,7 +12,7 @@ public class GameState extends State {
 	private Enemy enemy;
 	
 	public GameState(){
-		 enemy= new Enemy(100, 500);
+		 enemy= new Enemy(Display.getWindowWidth()-200, 500);
 	}
 	
 	@Override
