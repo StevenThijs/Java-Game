@@ -5,6 +5,8 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import fightGame.display.Display;
+import fightGame.entities.creatures.Enemy;
+import fightGame.graphics.Assets;
 import fightGame.graphics.ImageLoader;
 import fightGame.states.GameState;
 import fightGame.states.State;
@@ -22,10 +24,12 @@ public class Game implements Runnable {
 	private BufferStrategy bs;
 	private Graphics g;
 	
-	private BufferedImage test, landscape;
 	//States
 	private State gameState;
 	private State menuState;
+	
+	public static BufferedImage landscape= 
+			ImageLoader.loadImage("/textures/landscape.jpg");
 	
 	public Game(String title, int width, int height){
 		this.width = width;
@@ -35,12 +39,12 @@ public class Game implements Runnable {
 	
 	private void init(){
 		display = new Display(title, width, height);
+		Assets.init();
 		
 		gameState = new GameState();
 		State.setState(gameState);
-		
-		test= ImageLoader.loadImage("/textures/snakeBasic.png");
-		landscape= ImageLoader.loadImage("/textures/landscape.jpg");
+
+
 		
 	}
 	
@@ -58,11 +62,8 @@ public class Game implements Runnable {
 		g = bs.getDrawGraphics();
 		//Clear Screen
 		g.clearRect(0, 0, width, height);
-		//Draw Here!
-		g.drawImage(landscape, 0, 0, Display.getWindowWidth(), Display.getWindowHeigth(), null);
 		
-		g.drawImage(test, 50, 200, null);
-		
+		//Rendering
 		if(State.getState() != null)
 			State.getState().render(g);
 		
