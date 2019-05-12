@@ -2,13 +2,16 @@ package fightGame.entities;
 
 import java.awt.Graphics;
 
+import fightGame.Handler;
+
 public abstract class Entity {
 
-	protected float x, y;
+	public float x, y;
+	protected Handler handler;
 	
-	public Entity(float x, float y){
-		this.x = x;
-		this.y = y;
+	public Entity(Handler handler, float x, float y){
+		this.handler = handler;
+
 	}
 	
 	public abstract void tick();

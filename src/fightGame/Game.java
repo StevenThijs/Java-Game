@@ -1,48 +1,85 @@
 package fightGame;
 import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import fightGame.display.Display;
 import fightGame.entities.creatures.Enemy;
+import fightGame.entities.healthbar.EnemyHealthbar;
 import fightGame.graphics.Assets;
 import fightGame.graphics.ImageLoader;
+import fightGame.graphics.Text;
+import fightGame.input.MouseManager;
 import fightGame.states.GameState;
+import fightGame.states.LosingScreen;
+import fightGame.states.MenuState;
 import fightGame.states.State;
+import fightGame.states.VictoryScreen;
 
 
 public class Game implements Runnable {
 
-	private Display display;
+	// Frame setup
+	public Display display;
 	public int width, height;
 	public String title;
 	
+	// Maakt de thread
 	private boolean running = false;
 	private Thread thread;
 	
+	//Input
+	private MouseManager mouseManager;
+	
+	// Graphics
 	private BufferStrategy bs;
 	private Graphics g;
 	
-	//States
-	private State gameState;
-	private State menuState;
+	//Handler
+	private Handler handler;
 	
-	public static BufferedImage landscape= 
-			ImageLoader.loadImage("/textures/landscape.jpg");
+	//States
+	public State gameState;
+	public State menuState;
+	public State victoryScreen;
+	public State losingScreen;
+	
 	
 	public Game(String title, int width, int height){
 		this.width = width;
 		this.height = height;
 		this.title = title;
+		mouseManager = new MouseManager();
 	}
 	
 	private void init(){
-		display = new Display(title, width, height);
-		Assets.init();
 		
-		gameState = new GameState();
-		State.setState(gameState);
+		display = new Display(title, width, height);
+		display.getFrame().addMouseListener(mouseManager);
+		display.getFrame().addMouseMotionListener(mouseManager);
+		display.getCanvas().addMouseListener(mouseManager);
+		display.getCanvas().addMouseMotionListener(mouseManager);
+
+		
+		handler = new Handler(this);
+		
+		
+		Assets.init();
+		gameState = new GameState(handler);
+		menuState= new MenuState(handler);
+		victoryScreen= new VictoryScreen(handler);
+		losingScreen= new LosingScreen(handler);
+		State.setState(menuState);
 
 
 		
@@ -64,7 +101,7 @@ public class Game implements Runnable {
 		g.clearRect(0, 0, width, height);
 		
 		//Rendering
-		if(State.getState() != null)
+		if(State.getState() != null) 
 			State.getState().render(g);
 		
 		//End Drawing!
@@ -106,6 +143,18 @@ public class Game implements Runnable {
 		
 		stop();
 		
+	}
+	
+	public MouseManager getMouseManager(){
+		return mouseManager;
+	}
+	
+	public int getWidth(){
+		return width;
+	}
+	
+	public int getHeight(){
+		return height;
 	}
 	
 	public synchronized void start(){

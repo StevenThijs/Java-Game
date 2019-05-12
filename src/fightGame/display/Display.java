@@ -1,5 +1,6 @@
 package fightGame.display;
 import java.awt.Canvas;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -35,6 +36,7 @@ public class Display {
 		canvas.setPreferredSize(new Dimension(width, height));
 		canvas.setMaximumSize(new Dimension(width, height));
 		canvas.setMinimumSize(new Dimension(width, height));
+		canvas.setFocusable(false);
 		
 		frame.add(canvas);
 		frame.pack();
@@ -42,6 +44,10 @@ public class Display {
 
 	public Canvas getCanvas(){
 		return canvas;
+	}
+	
+	public JFrame getFrame(){
+		return frame;
 	}
 
 	public static int getWindowHeigth() {

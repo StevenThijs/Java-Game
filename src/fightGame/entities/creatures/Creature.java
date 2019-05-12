@@ -1,14 +1,16 @@
 package fightGame.entities.creatures;
 
+import fightGame.Handler;
 import fightGame.entities.Entity;
 
 public abstract class Creature extends Entity {
 	
-	public static int health;
+	public static float health;
 
-	public Creature(float x, float y) {
-		super(x, y);
-		health = 300;
+	public Creature(Handler handler, float x, float y) {
+		super(handler, x, y);
+		this.x=x;
+		this.y=y;
 	}
 	
 }
